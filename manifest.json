@@ -11,7 +11,6 @@
   ],
   "permissions": ["storage"],
   "action": {
-    "default_popup": "options.html",
     "default_icon": "icon.png"
   }
 }
