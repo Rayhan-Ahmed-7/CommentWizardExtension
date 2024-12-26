@@ -65,11 +65,7 @@ const addSuggestionButton = (commentBox) => {
 
     try {
       // Fetch suggestion
-      // const suggestion = await fetchSuggestion(createPrompt(commentBox));
-      await wait(2000);
-      let suggestion = "alsdfj";
-      console.log("Suggestion fetched:", suggestion);
-
+      const suggestion = await fetchSuggestion(createPrompt(commentBox));
       // Remove loader and update with suggestion
       editor.innerHTML = `<p>${suggestion}</p>`;
     } catch (error) {
