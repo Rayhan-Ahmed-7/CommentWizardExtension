@@ -19,6 +19,10 @@ const observer = new MutationObserver(() => {
     });
 });
 
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 observer.observe(document.body, { childList: true, subtree: true });
 
 const addSuggestionButton = (commentBox) => {
@@ -33,13 +37,50 @@ const addSuggestionButton = (commentBox) => {
   //   button.innerHTML =
   //     '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lightbulb-fill" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13h-5a.5.5 0 0 1-.46-.302l-.761-1.77a2 2 0 0 0-.453-.618A5.98 5.98 0 0 1 2 6m3 8.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1-.5-.5"/></svg>';
   button.innerHTML = generatorSvg;
+
   button.addEventListener("click", async () => {
-    // const suggestion = await fetchSuggestion(createPrompt(commentBox));
-    // commentBox.querySelector(".ql-editor").innerHTML = `<p>${suggestion}</p>`;
-    commentBox.querySelector(
-      ".ql-editor"
-    ).innerHTML = `<p>🌟 Good Morning! 🌟<br/>
-    May your day be filled with positivity, productivity, and peace. Embrace every opportunity, overcome every challenge, and spread kindness wherever you go. Remember, every little step brings you closer to your dreams. Have an amazing day ahead! 🌞✨</p>`;
+    const editor = commentBox.querySelector(".ql-editor");
+
+    if (!editor) {
+      console.error("No .ql-editor found!");
+      return;
+    }
+
+    // Create the loader element
+    const loader = document.createElement("div");
+    loader.className = "loading";
+    loader.innerHTML = `
+       <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
+         <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#f42f25" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+         <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#f49725" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+         <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#255ff4" stroke-width="20" stroke-dasharray="0 440" stroke-dashoffset="0" stroke-linecap="round"></circle>
+         <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#f42582" stroke-width="20" stroke-dasharray="0 440" stroke-dashoffset="0" stroke-linecap="round"></circle>
+       </svg>
+     `;
+
+    // Clear editor content and add loader
+    editor.innerHTML = ""; // Clear existing content
+    editor.appendChild(loader); // Show loader
+    console.log("Loader added to editor:", loader.children);
+
+    try {
+      // Fetch suggestion
+      // const suggestion = await fetchSuggestion(createPrompt(commentBox));
+      await wait(2000);
+      let suggestion = "alsdfj";
+      console.log("Suggestion fetched:", suggestion);
+
+      // Remove loader and update with suggestion
+      editor.innerHTML = `<p>${suggestion}</p>`;
+    } catch (error) {
+      console.error("Error fetching suggestion:", error);
+      editor.innerHTML = `<p style="color:red;">Failed to load suggestion. Please try again later.</p>`;
+    }
+
+    // commentBox.querySelector(
+    //   ".ql-editor"
+    // ).innerHTML = `<p>🌟 Good Morning! 🌟<br/>
+    // May your day be filled with positivity, productivity, and peace. Embrace every opportunity, overcome every challenge, and spread kindness wherever you go. Remember, every little step brings you closer to your dreams. Have an amazing day ahead! 🌞✨</p>`;
   });
   const displayFlexElement = commentBox.querySelector(".display-flex");
   if (displayFlexElement) {
@@ -57,7 +98,7 @@ const fetchSuggestion = async (prompt) => {
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     body: JSON.stringify({
-      model: "o1-mini-2024-09-12",
+      model: "gpt-4",
       messages: [
         {
           role: "developer",
