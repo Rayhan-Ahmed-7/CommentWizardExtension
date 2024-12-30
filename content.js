@@ -65,7 +65,9 @@ const addSuggestionButton = (commentBox) => {
 
     try {
       // Fetch suggestion
-      const suggestion = await fetchSuggestion(createPrompt(commentBox));
+      const suggestion = await fetchSuggestionFromGroq(
+        createPrompt(commentBox)
+      );
       // Remove loader and update with suggestion
       editor.innerHTML = `<p>${suggestion}</p>`;
     } catch (error) {
@@ -86,7 +88,7 @@ const addSuggestionButton = (commentBox) => {
   }
 };
 
-const fetchSuggestion = async (prompt) => {
+const fetchSuggestionFromGpt = async (prompt) => {
   const apiKey = await _apiKey();
   if (!apiKey) {
     return "";
@@ -117,6 +119,42 @@ const fetchSuggestion = async (prompt) => {
       Authorization: `Bearer ${apiKey}`,
     },
   });
+  return (await response.json()).choices[0].message.content.trim();
+};
+const fetchSuggestionFromGroq = async (prompt) => {
+  const apiKey = await _apiKey();
+  if (!apiKey) {
+    return "";
+  }
+  const response = await fetch(
+    "https://api.groq.com/openai/v1/chat/completions",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        model: "llama3-8b-8192",
+        messages: [
+          {
+            role: "user",
+            content:
+              "You are an assistant, that writes replies to LinkedIn posts to other persons. Use the same language as of the text of the post you are recieving in the user's prompt. Please sound like a human being. Don't use hashtags, use emojis occasionally, don't repeat too many of the exact words, but simply create a brief and positive reply.  Maybe add something to the discussion. Be creative! You may mention the name of the author, if it's the name of a natural person. Don't mention the name if it's the name of a company or a LinkedIn group.",
+          },
+          {
+            role: "user",
+            content: prompt,
+          },
+        ],
+        temperature: 1,
+        max_tokens: 256,
+        top_p: 0.7,
+        frequency_penalty: 2,
+        presence_penalty: 2,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+    }
+  );
   return (await response.json()).choices[0].message.content.trim();
 };
 const createPrompt = (commentBox) => {
