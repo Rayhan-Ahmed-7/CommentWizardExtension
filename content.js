@@ -170,7 +170,7 @@ const createPrompt = (commentBox) => {
     ".feed-shared-inline-show-more-text"
   )?.innerText;
 
-  let prompt = `${author}" wrote: ${text}`;
+  let prompt = `${author ?? "Someone"}" wrote: ${text}`;
 
   // Optional: Get comment details
   const commentElement = commentBox.closest(".comments-comment-item");
@@ -182,7 +182,9 @@ const createPrompt = (commentBox) => {
   )?.innerText;
 
   if (commentElement) {
-    prompt += `\n${commentAuthor} replied: ${commentText}\nPlease write a reply to the reply with a maximum of 20 words.`;
+    prompt += `\n${
+      commentAuthor ?? "someone"
+    } replied: ${commentText}\nPlease write a reply to the reply with a maximum of 20 words.`;
   } else {
     prompt += `\nPlease write a reply to this post with a maximum of 40 words.`;
   }
