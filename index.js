@@ -20,5 +20,5 @@ const restoreOptions = () => {
   });
 };
 
-document.addEventListener("DOMContentLoaded", restoreOptions);
+// document.addEventListener("DOMContentLoaded", restoreOptions);
 document.getElementById("save").addEventListener("click", saveOptions);

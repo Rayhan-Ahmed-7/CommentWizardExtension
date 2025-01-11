@@ -49,18 +49,23 @@ const addSuggestionButton = (commentBox) => {
     // Create the loader element
     const loader = document.createElement("div");
     loader.className = "loading";
+    // loader.innerHTML = `
+    //    <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
+    //      <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#f42f25" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
+    //      <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#f49725" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
+    //      <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#255ff4" stroke-width="20" stroke-dasharray="0 440" stroke-dashoffset="0" stroke-linecap="round"></circle>
+    //      <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#f42582" stroke-width="20" stroke-dasharray="0 440" stroke-dashoffset="0" stroke-linecap="round"></circle>
+    //    </svg>
+    //  `;
     loader.innerHTML = `
-       <svg class="pl" width="240" height="240" viewBox="0 0 240 240">
-         <circle class="pl__ring pl__ring--a" cx="120" cy="120" r="105" fill="none" stroke="#f42f25" stroke-width="20" stroke-dasharray="0 660" stroke-dashoffset="-330" stroke-linecap="round"></circle>
-         <circle class="pl__ring pl__ring--b" cx="120" cy="120" r="35" fill="none" stroke="#f49725" stroke-width="20" stroke-dasharray="0 220" stroke-dashoffset="-110" stroke-linecap="round"></circle>
-         <circle class="pl__ring pl__ring--c" cx="85" cy="120" r="70" fill="none" stroke="#255ff4" stroke-width="20" stroke-dasharray="0 440" stroke-dashoffset="0" stroke-linecap="round"></circle>
-         <circle class="pl__ring pl__ring--d" cx="155" cy="120" r="70" fill="none" stroke="#f42582" stroke-width="20" stroke-dasharray="0 440" stroke-dashoffset="0" stroke-linecap="round"></circle>
-       </svg>
+       Please wait...
      `;
 
     // Clear editor content and add loader
     editor.innerHTML = ""; // Clear existing content
-    editor.appendChild(loader); // Show loader
+    editor.innerHTML = `
+       Please wait...
+     `; // Show loader
     console.log("Loader added to editor:", loader.children);
 
     try {
